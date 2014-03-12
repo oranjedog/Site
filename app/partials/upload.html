@@ -6,7 +6,7 @@
 <div class="col-md-6">
 <form name="upload_form" style="padding-top: 10px">
 
-<div id="upload_error" class="{{defaultSound.uploadMsgClass}}" style="padding-left: 20px">
+<div id="upload_error" class="{{defaultSound.uploadMsgClass}}" style="padding-left: 20px;padding-bottom: 20px">
     {{ defaultSound.uploadMsg}}
 </div>
 
@@ -28,7 +28,7 @@
             </h4>
             <h5 ng-show="shouldCheckCapacity() && defaultSound.minutesToUpload > 0" style="color: #999;padding-top: 10px">除去已完成的上传，您还可以上传时长<span
                     style="color: rgb(51, 51, 51)">{{defaultSound.minutesToUpload}}分钟</span><span
-                    style="color: rgb(51, 51, 51)" ng-show="defaultSound.secondsToUpload > 0">{{defaultSound.secondsToUpload}}秒</span>的音频文件。如果您未上传他人的作品，届时将会得到更多上传空间。
+                    style="color: rgb(51, 51, 51)" ng-show="defaultSound.secondsToUpload > 0">{{defaultSound.secondsToUpload}}秒</span>的音频文件。如果您未上传侵权作品，届时将会得到更多上传空间。
             </h5>
             <h5 ng-show="shouldCheckCapacity() && defaultSound.minutesToUpload <= 0" style="color: #999;padding-top: 10px">
                 您已经达到当前阶段的上传限额，我们将对你上传的音频进行版权检查。如果您没有侵权上传，将获得更多空间，敬请谅解。

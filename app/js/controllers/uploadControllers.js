@@ -45,6 +45,11 @@ angular.module('upload.controllers', [
             }
 
             $scope.syncToWowoice = function(){
+                if (!$scope.defaultSound.soundLink)
+                {
+                    return;
+                }
+
                 $("#link_panel").modal('hide');
 
                 //Disable upload panel
@@ -87,9 +92,7 @@ angular.module('upload.controllers', [
 
                     Sound.discard({remoteId: $scope.defaultSound.fileName}, function(){
                         $scope.defaultSound.uploadMsg = null;
-                        $('#uploadpart').show();
-                        $('#progresspart').hide();
-                        $('#sound_info').hide();
+                        reset();
                     }, function(){
                         $scope.defaultSound.uploadMsgClass = "text-error";
                         $scope.defaultSound.uploadMsg = "放弃上传失败，请售后再试";

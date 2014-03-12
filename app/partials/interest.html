@@ -2,7 +2,7 @@
 
 <div class="row" style="margin-top: -40px;background-color: #F2F5F8;">
     <div class="col-md-2 col-xs-1"></div>
-    <div class="col-md-8 col-xs-10" style="padding-top: 50px;{{deviceEnv=='xs'?'':'width:870px'}}">
+    <div class="col-md-8 col-xs-10" style="padding-top: 60px;{{deviceEnv=='xs'?'':'width:870px'}}">
 
         <div id="recommand" style="position: relative;{{deviceEnv=='xs'?'':'height: 580px'}}" class="row">
             <div class="col-xs-12 col-md-9">
@@ -10,7 +10,7 @@
                     <h2 class="title_h2"><i class="icon-compass"></i> 推荐用户</h2>
                 </div>
 
-                <div style="background-color: white">
+                <div>
                     <ul class="users_display" style="padding: 0 0 0 10px;color: rgb(119, 119, 119);">
                         <li ng-repeat="recommendUser in recommendUsers">
                             <a href="{{recommendUser.route}}" class="avatar_a">

@@ -223,7 +223,7 @@
             <li ng-if="!userService.validateRoleGuest()">
                 <a title="邮件箱"
                    href="#" onclick="return false;" ng-click="goto('/messages')"><i class="icon-envelope"></i>
-                    <span class="badge" ng-if="unreadMsgs>0">{{unreadMsgs}}</span>
+                    <span class="badge" ng-if="unreadMsgs>0" style="background-color: #39b3d7">{{unreadMsgs}}</span>
                 </a>
             </li>
             <li ng-if="!userService.validateRoleGuest()">
