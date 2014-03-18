@@ -3,12 +3,12 @@
 <div role="main">
 
 <div class="row" style="margin: 0px;padding-top: 20px;">
-<div class="col-md-2"></div>
-<div class="col-md-8" style="padding-right: 0px; padding-left: 0px;{{deviceEnv=='xs'?'':'width:800px'}}">
+<div class="col-sm-2 hidden-xs"></div>
+<div class="col-sm-8 col-xs-12" style="{{(deviceEnv!='lg')?'':'width:800px'}}">
 <div id="sound_streams">
     <ng-include src="'partials/sound.html'"></ng-include>
 </div>
-<div class="col-md-2"></div>
+<div class="col-sm-2 hidden-xs"></div>
 </div>
 
 </div>

@@ -5,6 +5,8 @@
 angular.module('common.stream.controllers', [])
     .controller('recommandUserCtrl', ['$scope', 'config', '$routeParams', 'UserSocial', 'SoundSocial', '$q',
         function ($scope, config, $routeParams, UserSocial, SoundSocial, $q) {
+        $scope.routeParams = $routeParams;
+
         $scope.pageNum = 1;
         $scope.pageSize = 8;
         $scope.loadingUsers = false;

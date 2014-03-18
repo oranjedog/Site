@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('page.controllers', [])
-    .controller('pageCtrl', ['$scope', '$rootScope', '$routeParams', 'User', 'UserSocial', 'SoundSocial', 'PlayList', 'WooicePlayer', 'WooiceWaver', 'storage',
-        function ($scope, $rootScope, $routeParams, User, UserSocial, SoundSocial, PlayList, WooicePlayer, WooiceWaver, storage) {
+    .controller('pageCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$anchorScroll', 'User', 'UserSocial', 'SoundSocial', 'PlayList', 'WooicePlayer', 'WooiceWaver', 'storage',
+        function ($scope, $rootScope, $routeParams, $location, $anchorScroll, User, UserSocial, SoundSocial, PlayList, WooicePlayer, WooiceWaver, storage) {
 
             window.onbeforeunload = function (event) {
                 // when user leave the page, record the current status of the sound.
@@ -27,6 +27,17 @@ angular.module('page.controllers', [])
 
                 //record wave status
                 WooiceWaver.recordWaveStatus();
+            }
+
+            $scope.scrollTo = function(id){
+                $location.hash("temp");
+                $anchorScroll();
+                $location.hash(id);
+                $anchorScroll();
+            }
+
+            $scope.addToCurList = function(sound){
+                WooicePlayer.addSound(sound);
             }
 
             $scope.findBootstrapEnvironment = function() {
@@ -82,16 +93,23 @@ angular.module('page.controllers', [])
                 if (!sound) {
                     return;
                 }
+                sound.isLiking = true;
                 if (sound.soundUserPrefer && sound.soundUserPrefer.like) {
                     SoundSocial.unlike({ sound: sound.id}, null, function (likesCount) {
                         sound.soundUserPrefer.like = false;
                         sound.soundSocial.likesCount = likesCount.liked;
+                        sound.isLiking = false;
+                    }, function(){
+                        sound.isLiking = false;
                     });
                 }
                 else {
                     SoundSocial.like({sound: sound.id}, null, function (likesCount) {
                         sound.soundUserPrefer.like = true;
                         sound.soundSocial.likesCount = likesCount.liked;
+                        sound.isLiking = false;
+                    }, function(){
+                        sound.isLiking = false;
                     });
                 }
             };
@@ -100,16 +118,23 @@ angular.module('page.controllers', [])
                 if (!sound) {
                     return;
                 }
+                sound.isReposting = true;
                 if (sound.soundUserPrefer && sound.soundUserPrefer.repost) {
                     SoundSocial.unrepost({sound: sound.id}, null, function (repostsCount) {
                         sound.soundUserPrefer.repost = false;
                         sound.soundSocial.reportsCount = repostsCount.reposted;
+                        sound.isReposting = false;
+                    }, function(){
+                        sound.isReposting = false;
                     });
                 }
                 else {
                     SoundSocial.repost({sound: sound.id}, null, function (repostsCount) {
                         sound.soundUserPrefer.repost = true;
                         sound.soundSocial.reportsCount = repostsCount.reposted;
+                        sound.isReposting = false;
+                    }, function(){
+                        sound.isReposting = false;
                     });
                 }
             };
@@ -129,6 +154,24 @@ angular.module('page.controllers', [])
                         $("html, body").animate({scrollTop: 0}, 1000);
                     });
                 }
+            }
+
+            $scope.getWindowHeightCss = function(){
+                return {height: $(window).height()};
+            }
+
+            $scope.getWindowWidthCss = function(){
+                return {width: $(window).width()};
+            }
+
+            $scope.showQrCode = function(title, input) {
+                $('#qrcodeTitle').text(title);
+                jQuery('#qrcodeCanvas').empty();
+                jQuery('#qrcodeCanvas').qrcode({
+                    text	: utf16to8(input)
+                });
+
+                $('#qrcode_modal').modal();
             }
 
             new toTopBar($('#back_top'), $(document)).load();

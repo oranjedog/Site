@@ -28,7 +28,7 @@ angular.module('wooice.player', []).
             var currentSound = {};
             var soundData = init();
 
-            $rootScope.$watch(currentSound, function(){
+            $rootScope.$watch(currentSound, function () {
             });
 
             soundData.getNextSound = function (id) {
@@ -80,13 +80,13 @@ angular.module('wooice.player', []).
                                 }
                             },
                             onplay: function () {
-                                if (currentSound.id && currentSound.id != this.id) {
+                                if (currentSound && currentSound.id && currentSound.id != this.id) {
                                     currentSound.isPlaying = false;
                                     soundManager.pause(currentSound.id);
                                 }
                                 currentSound = PlayList.getSound(this.id);
                                 currentSound.isPlaying = true;
-                                soundManager.setVolume(this.id, 100-UserService.getVolume());
+                                soundManager.setVolume(this.id, 100 - UserService.getVolume());
                                 soundManager._writeDebug('Starting sound: ' + this.id);
 
                                 var playerStatus = storage.get(this.id + "_player");
@@ -95,10 +95,9 @@ angular.module('wooice.player', []).
                                     storage.set(this.id + "_player", playerStatus);
                                 }
 
-                                if ($location.path() && $location.path().indexOf("/sound/")>-1
-                                    && $location.path()!==("/sound/"+currentSound.alias))
-                                {
-                                    $location.url("/sound/"+currentSound.alias);
+                                if ($location.path() && $location.path().indexOf("/sound/") > -1
+                                    && $location.path() !== ("/sound/" + currentSound.alias)) {
+                                    $location.url("/sound/" + currentSound.alias);
                                 }
                             },
                             whileloading: function () {
@@ -110,11 +109,15 @@ angular.module('wooice.player', []).
                                 });
                             },
                             whileplaying: function () {
-                                currentSound = PlayList.getSound(this.id);
-                                var curPosition = this.position;
-                                $rootScope.$apply(function() {
-                                    currentSound.curPostion = curPosition;
-                                });
+                                var curSound = PlayList.getSound(this.id);
+
+                                if (curSound) {
+                                    currentSound = curSound;
+                                    var curPosition = this.position;
+                                    $rootScope.$apply(function () {
+                                        currentSound.curPostion = curPosition;
+                                    });
+                                }
 
                                 WooiceWaver.move({
                                     id: this.id,
@@ -135,7 +138,7 @@ angular.module('wooice.player', []).
                                 }
                             },
                             onresume: function () {
-                                if (currentSound.id && currentSound.id != this.id) {
+                                if (currentSound && currentSound.id && currentSound.id != this.id) {
                                     currentSound.isPlaying = false;
                                     soundManager.pause(currentSound.id);
                                 }
@@ -150,10 +153,9 @@ angular.module('wooice.player', []).
                                     storage.set(this.id + "_player", playerStatus);
                                 }
 
-                                if ($location.path() && $location.path().indexOf("/sound/")>-1
-                                    && $location.path()!==("/sound/"+currentSound.alias))
-                                {
-                                    $location.url("/sound/"+currentSound.alias);
+                                if ($location.path() && $location.path().indexOf("/sound/") > -1
+                                    && $location.path() !== ("/sound/" + currentSound.alias)) {
+                                    $location.url("/sound/" + currentSound.alias);
                                 }
                             },
                             onfinish: function () {
@@ -254,7 +256,6 @@ angular.module('wooice.player', []).
                     if (!soundManager.getSoundById(input.id)) {
                         var sound = input;
                         var playsCount = SoundSocial.play({sound: sound.id}, null, function (count) {
-                            PlayList.addSound(sound);
 
                             sound.url = playsCount.url;
                             sound.autoPlay = true;
@@ -270,6 +271,8 @@ angular.module('wooice.player', []).
                             soundToPlay.setPosition(input.position);
                         }
                     }
+
+                    PlayList.addSound(input);
                 }
             }
 
@@ -285,7 +288,7 @@ angular.module('wooice.player', []).
                     return;
                 }
 
-                if (!soundManager.getSoundById(sound.id)) {
+                if (!soundManager.getSoundById(sound.id) || !PlayList.getSound(sound.id)) {
                     soundData.play(sound);
                     return;
                 }
@@ -330,6 +333,7 @@ angular.module('wooice.player', []).
 
                 updateAlias: function (sound) {
                     var target = PlayList.getSound(input.id);
+
                     if (target) {
                         if (sound.id == currentSound.id) {
                         }
@@ -354,6 +358,10 @@ angular.module('wooice.player', []).
 
                 toggle: function (input) {
                     return soundData.toggle(input);
+                },
+
+                toggleInPlaylist: function (id) {
+                    return soundData.toggle(PlayList.getSound(id));
                 },
 
                 play: function (input) {
@@ -387,7 +395,39 @@ angular.module('wooice.player', []).
                 },
 
                 destroy: function (sound) {
+                    if (!sound) {
+                        return;
+                    }
+
+                    if (currentSound && sound.id == currentSound.id) {
+                        if (currentSound.isPlaying && PlayList.list().length > 1) {
+                            soundManager.pause(currentSound.id);
+                            var nextSound = PlayList.getNextSound(currentSound.id);
+                            nextSound.position = 0;
+                            soundData.play(nextSound);
+                        }
+                        else {
+                            currentSound = {};
+                        }
+                    }
+
+                    PlayList.removeSound(sound);
                     soundManager.destroySound(sound.id);
+                },
+
+                clearCurPlayList: function () {
+                    if (confirm('确定要清空播放列表吗?')) {
+                        var sounds = PlayList.list();
+                        for (var i = 0; i < sounds.length; i++) {
+                            if (currentSound && sounds[i].id == currentSound.id) {
+                                soundManager.togglePause(sounds[i].id);
+                                currentSound = {};
+                            }
+                            soundManager.destroySound(sounds[i].id);
+                        }
+
+                        PlayList.clearAll();
+                    }
                 }
             }
         }]);

@@ -25,10 +25,6 @@ angular.module('wooice.waver', []).
             },
 
             render: function (newSound) {
-                if (!soundData.soundList[newSound.id]) {
-                    soundData.soundList[newSound.id] = sound;
-                }
-
                 var canvas = document.getElementById("sound_wave_canvas_" + newSound.id);
                 canvas.width = $('#sound_wave_' + newSound.id).width();
                 canvas.height = $('#sound_wave_' + newSound.id).height();
@@ -39,9 +35,14 @@ angular.module('wooice.waver', []).
                     if (playerCache) {
                         newSound.position = playerCache.from;
                     }
+                    else
+                    {
+                        newSound.position = 0;
+                    }
                 }
 
-                if (soundData.soundList[newSound.id]) {
+                if (soundData.soundList[newSound.id])
+                {
                     sound = soundData.soundList[newSound.id];
                     sound.waveForm.updateCanvas(canvas, newSound.waveData);
                     sound.waveForm.updateCommentable(newSound.commentable);
@@ -72,17 +73,23 @@ angular.module('wooice.waver', []).
                         position: sound.position
                     });
 
-                delete newSound.waveData;
                 sound.waveForm.redraw();
+
+                delete newSound.waveData;
                 sound.waveForm.cleanWaveData();
             },
 
+            release: function (sound) {
+                if (sound && sound.id && soundData.soundList[sound.id]) {
+                    soundData.soundList[sound.id].waveForm.cleanWaveData();
+                    soundData.soundList[sound.id].waveForm.releaseCanvas();
+                }
+            },
+
             move: function (sound) {
-                if (soundData.soundList[sound.id])
-                {
+                if (soundData.soundList[sound.id]) {
                     var waveForm = soundData.soundList[sound.id].waveForm;
                     if (waveForm) {
-                        waveForm.recoverWaveData(storage);
                         waveForm.play();
                         waveForm.setSoundPosition(sound.soundPosition);
                         waveForm.redraw();
@@ -91,8 +98,7 @@ angular.module('wooice.waver', []).
             },
 
             load: function (sound) {
-                if (soundData.soundList[sound.id])
-                {
+                if (soundData.soundList[sound.id]) {
                     var waveForm = soundData.soundList[sound.id].waveForm;
                     waveForm.setSoundBytesloaded(sound.soundBytesloaded);
                     waveForm.setSoundBytesTotal(sound.soundBytesTotal);

@@ -89,7 +89,7 @@ angular.module('sound.services', ['ngResource'])
             comment: {method: 'PUT', params: {action: 'comment'}, isArray: false},
             uncomment: {method: 'DELETE', params: {action: 'comment'}, isArray: false},
             report: {method: 'PUT', params: {action: 'report'}, isArray: false},
-            recommandSounds: {method: 'GET', params: {action:'recommand', sound: 'sounds', pageNum:1, pageSize: 5}, isArray: true}
+            recommandSounds: {method: 'GET', cache : true, params: {action:'recommand', sound: 'sounds', pageNum:1, pageSize: 5}, isArray: true}
         });
     }
     ])
@@ -106,11 +106,11 @@ angular.module('sound.services', ['ngResource'])
 angular.module('tag.services', []).
     factory('Tag', ['$resource', 'config', function ($resource, config) {
         return $resource(config.service.url + '/tag/:path/:action/:tag', {}, {
-            query: {method: 'GET', params: {path: 'list'}, isArray: false},
+            query: {method: 'GET', cache : true, params: {path: 'list'}, isArray: false},
             attach: {method: 'PUT', params: {path: 'sound'}, isArray: true},
             dettach: {method: 'DELETE', params: {path: 'sound'}, isArray: false},
-            curated: {method: 'GET', params: {path:'list', action:'curated'}, isArray: true},
-            categories: {method: 'GET', params: {path:'list', action:'categories'}, isArray: true}
+            curated: {method: 'GET', cache : true, params: {path:'list', action:'curated'}, isArray: true},
+            categories: {method: 'GET', cache : true, params: {path:'list', action:'categories'}, isArray: true}
         });
     }])
 ;

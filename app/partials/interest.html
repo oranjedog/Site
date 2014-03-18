@@ -1,11 +1,11 @@
 <ng-include src="'partials/header.html'"></ng-include>
 
 <div class="row" style="margin-top: -40px;background-color: #F2F5F8;">
-    <div class="col-md-2 col-xs-1"></div>
-    <div class="col-md-8 col-xs-10" style="padding-top: 60px;{{deviceEnv=='xs'?'':'width:870px'}}">
+    <div class="col-sm-2 hidden-xs"></div>
+    <div class="col-sm-8 col-xs-12" style="padding-top: 60px;{{(deviceEnv!='lg')?'':'width:890px'}};">
 
-        <div id="recommand" style="position: relative;{{deviceEnv=='xs'?'':'height: 580px'}}" class="row">
-            <div class="col-xs-12 col-md-9">
+        <div id="recommand" style="position: relative;padding-right: 0px" ng-style="getWindowHeightCss()" class="row">
+            <div class="col-xs-12 col-sm-8" style="padding-right: 0px">
                 <div class="title_div">
                     <h2 class="title_h2"><i class="icon-compass"></i> 推荐用户</h2>
                 </div>
@@ -14,8 +14,7 @@
                     <ul class="users_display" style="padding: 0 0 0 10px;color: rgb(119, 119, 119);">
                         <li ng-repeat="recommendUser in recommendUsers">
                             <a href="{{recommendUser.route}}" class="avatar_a">
-                                <img ng-src="{{recommendUser.profile.avatorUrl}}" class="title_link"
-                                     style="{{deviceEnv=='xs'?'width:100px;height:100px':''}}">
+                                <img ng-src="{{recommendUser.profile.avatorUrl}}" class="title_link">
 
                                 <i class="avatar_cover">
                                     <b class="user_mask"></b>
@@ -37,7 +36,7 @@
                                     </b>
                                     <b class="user_mask_follow">
                                         <btn class="btn btn-primary button-tiny form-control ng-binding"
-                                           onclick="return false;" ng-click="follow(recommendUser)">
+                                             onclick="return false;" ng-click="follow(recommendUser)">
                                             <span ng-if="recommendUser.userPrefer.following">关注中</span>
                                             <span ng-if="!recommendUser.userPrefer.following">关注</span>
                                         </btn>
@@ -53,12 +52,18 @@
                     <div style="clear: both;padding-bottom: 10px"></div>
                 </div>
 
-                <div ng-if="recommendUsers.length == 0">
+                <div style="text-align: center;" ng-if="loadingUsers">
+                    <i class="icon-spinner icon-spin icon-large"></i> 努力加载中...
+                </div>
+
+                <div ng-if="!loadingUsers && recommendUsers.length == 0">
                     暂无用户推荐
                 </div>
             </div>
 
-            <div class="col-md-3 hidden-xs">
+            <div class="col-sm-1 hidden-xs"></div>
+
+            <div class="col-sm-3 hidden-xs">
                 <div class="title_div">
                     <h2 class="title_h2" style="font-size: 17px"><i class="icon-question-sign"></i> 帮助</h2>
                 </div>
@@ -73,34 +78,51 @@
         </div>
 
     </div>
-    <div class="col-md-2 col-xs-1"></div>
+    <div class="col-sm-2 hidden-xs"></div>
 </div>
 
-<div class="row">
-    <div class="col-md-2 col-xs-1"></div>
-    <div class="col-md-8 col-xs-10" style="padding-top: 0px;{{deviceEnv=='xs'?'':'width:870px'}}">
-        <div style="padding-top: 15px;position: relative" class="row">
-            <div class="col-md-9 col-xs-12">
+<div class="row" style="padding-right: 0px">
+    <div class="col-sm-2 hidden-xs"></div>
+
+    <div class="col-sm-8 col-xs-12" style="padding: 0px;{{(deviceEnv!='lg')?'':'width:890px'}};padding-right:0px">
+        <div style="padding-right:0px;padding-top: 15px;position: relative" class="row">
+            <div class="col-sm-8 col-xs-12" style="padding-right: 0px">
                 <div class="title_div">
                     <h2 class="title_h2"><i class="icon-tasks"></i> 推荐声音</h2>
                 </div>
                 <ng-include src="includePage" autoscroll></ng-include>
             </div>
 
-            <div class="col-md-3 hidden-xs">
+            <div class="col-sm-1 hidden-xs"></div>
+            <div class="col-sm-3 hidden-xs">
                 <div class="title_div">
                     <h2 class="title_h2" style="font-size: 17px"><i class="icon-tags"></i> 标签</h2>
                 </div>
                 <div style="border-bottom:2px solid #E6E6E6;height: 60px;background-color: #ffffff">
-                    <div style="display: inline;float: left;line-height: 20px;padding: 10px 0 10px 0px">
-                        <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='音乐流派'"
-                           style="color: {{curCategory=='音乐流派'?'black':''}}">音乐流派</a>
-                        <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='乐器演奏'"
-                           style="color: {{curCategory=='乐器演奏'?'black':''}}">乐器演奏</a>
-                        <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='戏曲曲艺'"
-                           style="color: {{curCategory=='戏曲曲艺'?'black':''}}">戏曲曲艺</a>
-                        <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='人声朗读'"
-                           style="color: {{curCategory=='人声朗读'?'black':''}}">人声朗读</a>
+                    <div style="display: inline;float: left;line-height: 20px;padding: 10px 0 10px 0px;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='音乐流派'"
+                                       style="color: {{curCategory=='音乐流派'?'black':''}}">音乐流派</a>
+                                </td>
+                                <td>
+                                    <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='乐器演奏'"
+                                       style="color: {{curCategory=='乐器演奏'?'black':''}}">乐器演奏</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='戏曲曲艺'"
+                                       style="color: {{curCategory=='戏曲曲艺'?'black':''}}">戏曲曲艺</a>
+                                </td>
+                                <td>
+                                    <a class="tag_cat" href="#" onclick="return false;" ng-click="curCategory='人声朗读'"
+                                       style="color: {{curCategory=='人声朗读'?'black':''}}">人声朗读</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
@@ -121,7 +143,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-xs-1"></div>
+
+    <div class="col-sm-2 hidden-xs"></div>
 </div>
 
 <div>

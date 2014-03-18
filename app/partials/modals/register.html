@@ -1,0 +1,177 @@
+<div id="register_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" ng-controller="registerCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom:0px;padding-bottom: 0px">
+                <div class="title_div">
+                    <h2 class="title_h2">用户注册</h2>
+                </div>
+            </div>
+
+            <div class="modal-body" style="padding-left: 40px;padding-top: 0px">
+                <form name="the_form" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-1 hidden-xs">
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="controls text-warning">
+                                    <div ng-show="failedReason=='VERIFY_CODE'">注册码填写错误</div>
+                                    <div ng-show="failedReason=='ALIAS_NOT_NULL'">用户名不能为空</div>
+                                    <div ng-show="failedReason=='PASSWORD_NOT_NULL'">密码不能为空</div>
+                                    <div ng-show="failedReason=='ALIAS_DUPLICATE'">用户名已被注册，请再选一个</div>
+                                    <div ng-show="failedReason=='EMAIL_DUPLICATE'">该邮箱已被使用</div>
+                                    <div ng-show="failedReason=='ERROR'">注册失败，请稍后再试</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="inputAlias"><i
+                                        style="color: #F00;padding-right: 4px;">*</i>邮箱</label>
+
+                                <div class="controls">
+                                    <div class="text-warning"
+                                         ng-show="the_form.email.$dirty && the_form.email.$invalid">
+                                        <small class="text-warning"
+                                               ng-show="the_form.email.$error.required">
+                                            邮箱地址不能为空
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.email.$error.email">
+                                            请输入合理的邮箱地址
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.email.$error.unique">
+                                            邮箱已被使用，请重新选择
+                                        </small>
+                                    </div>
+                                    <input type="email" name="email" id="inputAlias" class="form-control"
+                                           placeholder="请输入您常用邮箱"
+                                           ng-model="emailAddress" email-unique="email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="inputEmail" tooltip="用户名将用于版权验证，请填写您在创业音乐作品中的常用名"><i
+                                        style="color: #F00;padding-right: 4px;">*</i>用户名</label>
+
+                                <div class="controls">
+                                    <div class="text-warning"
+                                         ng-show="the_form.alias.$dirty && the_form.alias.$invalid">
+                                        <small class="text-warning"
+                                               ng-show="the_form.alias.$error.unique">
+                                            用户名已被使用，请重新选择
+                                        </small>
+                                    </div>
+                                    <input type="text" id="inputEmail" class="form-control" name="alias"
+                                           placeholder="用户名"
+                                           ng-model="userAlias" alias-unique="alias" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="inputPassword1"><i
+                                        style="color: #F00;padding-right: 4px;">*</i>密码</label>
+
+                                <div class="controls">
+                                    <div class="text-warning"
+                                         ng-show="the_form.inputPassword1.$dirty && the_form.inputPassword1.$invalid">
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword1.$error.required">
+                                            密码不能为空
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword1.$error.minlength">
+                                            密码长度必须大于6个字符
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword1.$error.maxlength">
+                                            密码长度不得超过20个字符
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword1.$error.equal">
+                                            2次输入密码不相同
+                                        </small>
+                                    </div>
+                                    <input type="password" class="form-control" id="inputPassword1"
+                                           name="inputPassword1"
+                                           placeholder="密码" ng-model="password1" ng-minlength=6 ng-maxlength=20
+                                           pass-equal="inputPassword1" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="inputPassword2"><i
+                                        style="color: #F00;padding-right: 4px;">*</i>再输一次</label>
+
+                                <div class="controls">
+                                    <div class="text-warning"
+                                         ng-show="the_form.inputPassword2.$dirty && the_form.inputPassword2.$invalid">
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword2.$error.required">
+                                            密码不能为空
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword2.$error.minlength">
+                                            密码长度必须大于6个字符
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword2.$error.maxlength">
+                                            密码长度不得超过20个字符
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.inputPassword2.$error.equal">
+                                            2次输入密码不相同
+                                        </small>
+                                    </div>
+                                    <input type="password" id="inputPassword2" class="form-control"
+                                           name="inputPassword2"
+                                           placeholder="请再输一次" ng-model="password2" ng-minlength=6 ng-maxlength=20
+                                           pass-equal="inputPassword2" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="verifyCode"><i
+                                        style="color: #F00;padding-right: 4px;">*</i>验证码</label>
+
+                                <div class="controls">
+                                    <div class="text-warning"
+                                         ng-show="the_form.verifyCode.$dirty && the_form.verifyCode.$invalid">
+                                        <small class="text-warning"
+                                               ng-show="the_form.verifyCode.$error.required">
+                                            验证码不能为空
+                                        </small>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <input type="text" id="verifyCode" name="verifyCode" class="form-control"
+                                                   placeholder="验证码"
+                                                   ng-model="verifyCode" required>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img
+                                                    ng-src="{{config.service.url_noescp + '/auth/verify/image?refesh=' + refresh}}"
+                                                    ng-click="refresh=!refresh" title="看不清，换一张">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="controls">
+                                    <button type="submit" ng-disabled="the_form.$invalid"
+                                            class="btn btn-default form-control"
+                                            ng-click="toRegister()">注册
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 hidden-xs">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

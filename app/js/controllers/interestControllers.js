@@ -11,6 +11,8 @@ angular.module('interest.controllers', [])
             $scope.recommendUsers = [];
             $scope.includePage = "";
             $scope.curCategory = '音乐流派';
+            $scope.includePage = "partials/stream.html";
+            $scope.loadingUsers = false;
 
             var categories = Tag.categories({}, function () {
                 $.each(categories, function (index, cate) {
@@ -19,6 +21,7 @@ angular.module('interest.controllers', [])
                 $scope.categories = categories;
             });
 
+            $scope.loadingUsers = true;
             var tags = Tag.curated({}, function () {
                 var interestedTags = [];
                 $.each(tags, function (index, tag) {
@@ -32,8 +35,8 @@ angular.module('interest.controllers', [])
                     $scope.curatedTags.push(tag);
                 });
 
-                $scope.includePage = "partials/stream.html";
                 var users = UserSocial.getRecommandByTags({}, {tags: interestedTags, pageNum: $scope.pageNum, pageSize: $scope.pageSize}, function () {
+                    $scope.loadingUsers = false;
                     $.each(users, function (index, user) {
                         user.route = config.userStreamPath + user.profile.alias;
                         if (!user.userPrefer) {

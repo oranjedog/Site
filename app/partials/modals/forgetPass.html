@@ -1,0 +1,62 @@
+<div id="forgetPass_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" ng-controller="forgetPassCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom:0px">
+                <div class="title_div">
+                    <h2 class="title_h2">重置密码</h2>
+                </div>
+            </div>
+
+            <div class="modal-body" style="padding-left: 40px">
+                <div style="padding-left: 50px;">
+                    <h5 ng-class="messageClass">{{message}}</h5>
+                </div>
+                <form name="the_form" class="form-horizontal">
+                    <div class="form-group" style="padding-left: 25px;">
+                        <h4 style="font-size: 15px">
+                            请输入您的注册邮箱，我们将发送重置密码链接邮件到您的注册邮箱，您可以通过该链接修改密码。
+                        </h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 hidden-xs"></div>
+                        <div class="col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label" for="inputAlias">您的邮箱</label>
+
+                                <div class="controls">
+                                    <div class="text-warning"
+                                         ng-show="the_form.email.$dirty && the_form.email.$invalid">
+                                        <small class="text-warning"
+                                               ng-show="the_form.email.$error.required">
+                                            邮箱地址不能为空
+                                        </small>
+                                        <small class="text-warning"
+                                               ng-show="the_form.email.$error.email">
+                                            请输入合理的邮箱地址
+                                        </small>
+                                    </div>
+                                    <input type="email" name="email" id="inputAlias" class="form-control"
+                                           placeholder="邮箱"
+                                           ng-model="emailAddress" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="controls">
+                                    <button type="submit" ng-disabled="the_form.$invalid"
+                                            class="btn btn-default form-control" ng-click="toSubmit()">提交
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 hidden-xs"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

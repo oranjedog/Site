@@ -20,8 +20,6 @@ angular.module('sound.controllers', [])
             var query = $location.search();
             if (query.scrollTo) {
                 $scope.target = query.scrollTo;
-                $location.hash($routeParams.scrollTo);
-                $anchorScroll();
             }
 
             if ($scope.$parent.mode) {

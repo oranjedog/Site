@@ -9,6 +9,29 @@ body {
     letter-spacing: 0.2px;
 }
 
+.row {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.col-xs-1,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .btn-default {
     color: rgb(119, 119, 119);
 }
@@ -64,11 +87,12 @@ a {
 }
 
 .sound_player_body {
-    height: 70px;
+    height: 65px;
 }
 
 .sound_player_footer{
     padding-top: 6px;
+    padding-bottom: 3px;
 }
 
 .sound_player_wave {
@@ -228,9 +252,10 @@ input.ng-dirty.ng-valid {
 
 .tags li, .tags a{
     height:20px;
-    line-height:20px;
+    line-height: 20px;
     position:relative;
     font-size:12px;
+    overflow: hidden;
 }
 
 .tags a{
@@ -257,13 +282,13 @@ input.ng-dirty.ng-valid {
     height:0;
     border-color:transparent #9E9E9E transparent transparent;
     border-style:solid;
-    border-width:9px 10px 9px 0;
+    border-width:8px 10px 8px 0;
 }
 
 .tags a:after{
     content:"";
     position:absolute;
-    top:8px;
+    top:6px;
     left:0;
     float:left;
     width:4px;
@@ -468,8 +493,8 @@ input.ng-dirty.ng-valid {
 .title_link {
     display: block;
     overflow: hidden;
-    width: 130px;
-    height: 130px;
+    width: 125px;
+    height: 125px;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -478,8 +503,8 @@ input.ng-dirty.ng-valid {
 }
 
 .user_mask{
-    width: 130px;
-    height: 130px;
+    width: 125px;
+    height: 125px;
     position: absolute;
     z-index: 2;
     top: 20px;
@@ -596,10 +621,13 @@ input.ng-dirty.ng-valid {
 }
 
 .tag_cat {
-    margin-left: 20px;
+    margin-left: 10px;
     font-size: 14px;
     color: #666;
     font-weight: bold;
+    height: 20px;
+    overflow: hidden;
+    display: block;
 }
 
 .avatar_cover{
@@ -616,7 +644,6 @@ a.avatar_a:hover .avatar_cover {
     background-size: cover;
     color: #FFF;
     background-position: left top;
-    height: 900px;
     width: 100%;
     text-align: center;
 }
@@ -663,8 +690,8 @@ a.avatar_a:hover .avatar_cover {
 
 .mission {
     background: none repeat scroll 0 0 #F2F5F8;
-    height: 589px;
     width: 100%;
+    background-color: #ffffff;
 }
 
 .mission-inner {
@@ -675,7 +702,7 @@ a.avatar_a:hover .avatar_cover {
 
 .services-container {
     background: none repeat scroll 0 0 #F2F5F8;
-    min-height: 1060px;
+    min-height: 860px;
     padding-bottom: 20px;
     text-align: center;
 }

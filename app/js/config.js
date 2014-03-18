@@ -10,7 +10,7 @@ angular.module('wooice.config', []).constant(
 //		},
 //		service : {
 //			url : 'http:///localhost/Services',
-//            url_noescp : 'http:/s/localhost/Services'
+//            url_noescp : 'http://localhost/Services'
 //		},
 //        storage: {
 //            wave: 'http://wooice-wave-dev.u.qiniudn.com'
@@ -28,7 +28,7 @@ angular.module('wooice.config', []).constant(
         },
 
         userStreamPath: 'stream/',
-        soundsPerPage: 4,
+        soundsPerPage: 8,
         commentsPerPage: 8,
         likesPerPage: 9,
         repostsPerPage:9,

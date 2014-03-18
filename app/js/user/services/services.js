@@ -10,10 +10,10 @@ angular.module('profile.services', []).
             sendMessage: {method: 'POST', params: {action:'send'}, isArray: false},
             replyMessage: {method: 'PUT', params: {action:'reply'}, isArray: false},
             markMessage: {method: 'POST', params: {action:'mark'}, isArray: false},
-            listMessages: {method: 'GET', params: {action:"list", pageNum:1,perPage:5}, isArray: true},
+            listMessages: {method: 'GET', cache : true, params: {action:"list", pageNum:1,perPage:5}, isArray: true},
             getMessage: {method: 'GET', params: {}, isArray: false},
-            countMessage: {method: 'HEAD', params: {action:"count"}, isArray: false},
-            getReplies: {method: 'GET', params: {action:'replies'}, isArray: true}
+            countMessage: {method: 'HEAD', cache : true, params: {action:"count"}, isArray: false},
+            getReplies: {method: 'GET', cache : true, params: {action:'replies'}, isArray: true}
         });
     }])
 ;

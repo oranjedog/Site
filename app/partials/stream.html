@@ -1,20 +1,23 @@
 <div id="sound_streams" ng-controller="streamCtrl">
-    <a href="#" onclick="return false;" ng-click="loadStream('true')" class="pull-right"><i
-            class="icon-refresh"></i></a>
+<a href="#" onclick="return false;" ng-click="loadStream('true')" class="pull-right"><i
+        class="icon-refresh"></i></a>
 
-    <div ng-show="routeParams.userId == userService.getCurUserAlias() && newSoundCount > 0" style="text-align: center">
-        <a href="#" onclick="return false;" ng-click="loadStream('true')">您的声音已处理完成，点此<i
-                class="icon-refresh">刷新</i></a>
-    </div>
-    <div ng-show="routeParams.userId !== userService.getCurUserAlias() && newSoundCount > 0" style="text-align: center">
-        <a href="#" onclick="return false;" ng-click="loadStream('true')">{{userCurPage}}上传了新的声音，点此<i
-                class="icon-refresh">刷新</i></a>
-    </div>
+<div ng-if="routeParams.userId == userService.getCurUserAlias() && newSoundCount > 0" style="text-align: center">
+    <a href="#" onclick="return false;" ng-click="loadStream('true')">您的声音已处理完成，点此<i
+            class="icon-refresh">刷新</i></a>
+</div>
+<div ng-if="routeParams.userId !== userService.getCurUserAlias() && newSoundCount > 0" style="text-align: center">
+    <a href="#" onclick="return false;" ng-click="loadStream('true')">{{userCurPage}}上传了新的声音，点此<i
+            class="icon-refresh">刷新</i></a>
+</div>
 
+<div in-view-container>
     <!--sound streams-->
-    <div ng-repeat="sound in curSoundList.getList()"  ng-class-even="'player_even'" ng-class-odd="'player_odd'">
-        <div id="sound_{{sound.id}}" class='sound_item row' style="margin-right: 0px;margin-left: 0px">
-            <div id="sound_art_{{sound.id}}" class='sound_art col-md-2 hidden-xs' style="padding-left: 5px;padding-right: 10px">
+    <div ng-repeat="sound in curSoundList.getList()" in-view="toggleWaveData($index, $inview, $inviewpart)"
+         ng-class-even="'player_even'" ng-class-odd="'player_odd'">
+        <div id="sound_{{sound.id}}" class='sound_item row' style="margin-right: 0px;margin-left: 0px;padding: 0px">
+            <div id="sound_art_{{sound.id}}" class='sound_art col-sm-2 hidden-xs'
+                 style="padding-left: 5px;padding-right: 10px">
                 <div id="sound_cover_{{sound.id}}">
                     <div id="sound_cover_ul_{{sound.id}}" class='poster_img' style="padding-top: 45%">
                         <a href="{{sound.title.route}}">
@@ -24,17 +27,21 @@
                 </div>
             </div>
 
-            <div id="sound_player_{{sound.id}}" class='sound_player col-md-10 col-xs-12' style="padding-left: 0px;padding-right: 5px;">
+            <div id="sound_player_{{sound.id}}" class='sound_player col-sm-10 col-xs-12'
+                 style="padding-left: 0px;padding-right: 5px;">
                 <div class="pull-right">
                     <div style="font-size: 12px;color: gray" class="pull-right">
-                        {{sound.createdTime}} <span ng-if="user.profile && user.profile.alias!=sound.owner.alias"><span class="badge">转</span></span>
+                        <span ng-if="user.profile && user.profile.alias!=sound.owner.alias">
+                            <span class="badge" style="background-color: burlywood">转</span></span>
+                        {{sound.createdTime}}
                     </div>
                 </div>
 
                 <div id="sound_player_header_{{sound.id}}" class='sound_player_header'>
                     <div class='sound_player_control' style="padding-left: 20px">
                         <i style="cursor:pointer"
-                           class="sound_player_button {{sound.isPlaying?'icon-pause': 'icon-play'}}" ng-click="togglePause(sound.id)"></i>
+                           class="sound_player_button {{sound.isPlaying?'icon-pause': 'icon-play'}}"
+                           ng-click="togglePause(sound.id)"></i>
                     </div>
                     <div id="sound_summary_{{sound.id}}" style="padding-left: 50px">
                         <div class="hidden-xs">
@@ -45,12 +52,14 @@
                                 <a class='sound_title' href="{{sound.title.route}}">{{sound.title.alias}}</a>
 
                                 <div class="pull-right">
-                                    <ul class="tags">
-                                        <li ng-repeat="tag in sound.tags | filter: {curated:true}" style="display: inline">
-                                            <a href="/stream/tags/{{tag.label}}" ng-show="$index<3">
-                                                <span ng-show="tag.curated"><i class="icon-certificate"
-                                                                               style="color: #A4D3EE" title="Wooice标签"></i> {{tag.label}}</span>
-                                                <span ng-show="!tag.curated">{{tag.label}}</span>
+                                    <ul class="tags" style="line-height: 20px;height:20px;overflow: hidden">
+                                        <li ng-repeat="tag in sound.tags | filter: {curated:true}"
+                                            style="display: inline">
+                                            <a href="/stream/tags/{{tag.label}}" ng-if="$index<3">
+                                                <span ng-if="tag.curated"><i class="icon-certificate"
+                                                                             style="color: #A4D3EE"
+                                                                             title="Wooice标签"></i> {{tag.label}}</span>
+                                                <span ng-if="!tag.curated">{{tag.label}}</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -63,20 +72,21 @@
                             </span>
                             By
                              <span>
-                                <a class='sound_owner' href="{{sound.owner.route}}"  style="font-size: 16px">{{sound.owner.alias}}</a>
+                                <a class='sound_owner' href="{{sound.owner.route}}" style="font-size: 16px">{{sound.owner.alias}}</a>
                             </span>
                         </div>
                     </div>
                 </div>
                 <div id="sound_player_body_{{sound.id}}" class='sound_player_body'>
                     <div id="sound_wave_{{sound.id}}" class='sound_player_wave' style="cursor:pointer">
-                        <canvas id="sound_wave_canvas_{{sound.id}}" ng-show="sound.processed"></canvas>
-                        <img ng-src="img/wave.png" ng-show="!sound.processed" style="height: 100%;width: 100%">
+                        <canvas id="sound_wave_canvas_{{sound.id}}" ng-if="sound.processed"></canvas>
+                        <img ng-src="img/wave.png" ng-if="!sound.processed" style="height: 100%;width: 100%">
                     </div>
                 </div>
                 <div id="sound_player_footer_{{sound.id}}" class='sound_player_footer'>
                     <div id="sound_commentbox_{{sound.id}}" style="display: none">
-                        <form ng-submit="comment(sound)" style="margin-bottom:0px; padding-top: 2px;padding-bottom: 5px">
+                        <form ng-submit="comment(sound)"
+                              style="margin-bottom:0px; padding-top: 2px;padding-bottom: 5px">
                             <input type="text" id="sound_commentbox_input_{{sound.id}}"
                                    class="form-control input-sm"
                                    placeholder="请留下您的评论...">
@@ -85,14 +95,17 @@
                     </div>
 
                     <div class="row" style="margin: 0px">
-                        <div class="col-md-5 hidden-xs" style="padding-left: 0px;padding-right: 0px">
-                            <a href="#" class="btn btn-default btn-xs action-button"
+                        <div class="col-sm-5 hidden-xs" style="padding-left: 0px;padding-right: 0px">
+                            <a href="#" class="btn btn-default btn-xs action-button" ng-disabled="sound.isLiking"
                                onclick="return false;" ng-click="like(sound)"><i class="icon-heart"></i></i>
-                                <span ng-show="!sound.soundUserPrefer.like">赞</span></a>
-                            <a href="#" class="btn btn-default btn-xs action-button"
+                                <span ng-if="!sound.soundUserPrefer.like">赞</span></a>
+                            <a href="#" class="btn btn-default btn-xs action-button" ng-disabled="sound.isReposting"
                                onclick="return false;" ng-click="repost(sound)"><i
                                     class="icon-retweet"></i></i> <span
-                                    ng-show="!sound.soundUserPrefer.repost">转</span></a>
+                                    ng-if="!sound.soundUserPrefer.repost">转</span></a>
+                            <a href="#" class="btn btn-default btn-xs action-button" title="加入当前播放列表"
+                               onclick="return false;" ng-click="addToCurList(sound)"><i
+                                    class="icon-plus"></i></a>
                             <a href="#" class="btn btn-default btn-xs action-button hasTooltip"
                                onclick="return false;"
                                     ><i class="icon-share"></i>分享
@@ -103,55 +116,65 @@
                                     <label style="font-size: 9px">链接分享</label><input type="text"
                                                                                      class="form-control input-sm"
                                                                                      value="{{config.site.url}}/sound/{{sound.alias}}">
-                                    <label style="font-size: 9px">代码分享</label><input type="text" class="form-control input-sm"
+                                    <label style="font-size: 9px">代码分享</label><input type="text"
+                                                                                     class="form-control input-sm"
                                                                                      value='<iframe width="100%" height="188" scrolling="no" frameborder="no" src="{{config.site.url}}/player/{{sound.alias}}"></iframe>'>
                                 </div>
-                                <div>
-                                    <a href="http://service.weibo.com/share/share.php?url={{config.site.url}}/
-                                sound/{{sound.alias}}&type=button&count=0&language=zh_cn&appkey=fu5sr&searchPic=false&style=simple"
+                                <div style="padding-top: 5px">
+                                    <a href="http://service.weibo.com/share/share.php?url={{config.site.url}}/sound/{{sound.alias}}&type=button&count=0&language=zh_cn&appkey=fu5sr&searchPic=false&style=simple"
                                        target="_blank" style="border: 0;width: 32px;height: 32px" title="分到新浪微博"><img
-                                            src="img/logo/sina.png"  style="width: 35px"/></a>
+                                            src="img/logo/sina.png" style="width: 35px"/></a>
+                                    <a href="#" onclick="return false;" style="padding-left: 5px"
+                                       ng-click="showQrCode('{{sound.alias}}', '{{config.site.url}}/sound/{{sound.alias}}')">
+                                        <img src="img/qrcode.png" style="width: 35px"/>
+                                    </a>
                                 </div>
                             </div>
                             <a href="#" class="btn btn-default btn-xs action-button"
                                ng-if="sound.owner.alias == userService.getCurUserAlias() || userService.validateRoleAdmin()"
                                onclick="return false;" ng-click="delete()"><i
-                                    class="icon-trash"></i></i> 删除</a>
+                                    class="icon-trash"></i> 删除</a>
 
                             <a href="#" class="btn btn-default btn-xs action-button"
-                               ng-show="sound.downloadable" onclick="return false;" ng-click="download()"><i
-                                    class="icon-trash"></i></i> 下载</a>
+                               ng-if="sound.downloadable" onclick="return false;" ng-click="download()"><i
+                                    class="icon-trash"></i> 下载</a>
                         </div>
 
                         <div class="col-xs-5 visible-xs" style="padding: 0px;margin-right: -10px">
                             <span>
-                                <button class="btn btn-xs"  ng-click="like(sound)"><i class="icon-heart"></i></i>
-                                    <span ng-show="!sound.soundUserPrefer.like">赞</span></button>
+                                <button class="btn btn-xs" ng-disabled="sound.isLiking" ng-click="like(sound)"><i
+                                        class="icon-heart"></i></i>
+                                    <span ng-if="!sound.soundUserPrefer.like">赞</span></button>
                             </span>
                             <span>
-                                <button class="btn btn-xs"  ng-click="repost(sound)"><i
+                                <button class="btn btn-xs" ng-disabled="sound.isReposting" ng-click="repost(sound)"><i
                                         class="icon-retweet"></i></i> <span
-                                        ng-show="!sound.soundUserPrefer.repost">转</span></button>
+                                        ng-if="!sound.soundUserPrefer.repost">转</span></button>
                             </span>
-                            <span  ng-if="sound.owner.alias == userService.getCurUserAlias()">
-                                <button class="btn btn-xs" ng-click="delete()"><i
+                            <span ng-if="sound.owner.alias == userService.getCurUserAlias()">
+                                <button class="btn btn-xs" ng-disabled="sound.isDeleting" ng-click="delete()"><i
                                         class="icon-trash"></i></i> 删
                                 </button>
                             </span>
+                            <span>
+                                <button class="btn btn-default btn-xs action-button"
+                                        ng-click="addToCurList(sound)"><i
+                                        class="icon-plus"></i></button>
+                            </span>
                         </div>
 
-                        <div class="col-md-7 col-xs-7" style="margin-bottom: 6px;padding-left:0px;padding-right: 0px" >
+                        <div class="col-sm-7 col-xs-7" style="margin-bottom: 6px;padding-left:0px;padding-right: 0px">
                             <span class="pull-right">
-                                    <span ng-show="sound.owner.alias == userService.getCurUserAlias()">
+                                    <span ng-if="sound.owner.alias == userService.getCurUserAlias()">
                                         <i class="icon-lock"
-                                           ng-show="sound.status == 'private'">私有 |</i>
+                                           ng-if="sound.status == 'private'">私有 |</i>
                                         <i class="icon-unlock-alt"
-                                           ng-show="sound.status == 'public'">公开 |</i>
+                                           ng-if="sound.status == 'public'">公开 |</i>
                                     </span>
                                 <i class="icon-play-sign stat_icon"></i>
                                     <span id="play_count_{{sound.id}}">
-                                        <span ng-show="!(userService.validateRolePro() || userService.validateRolesPro())">{{sound.soundSocial.playedCount}}</span>
-                                        <span ng-show="userService.validateRolePro() || userService.validateRolesPro()"><a
+                                        <span ng-if="!(userService.validateRolePro() || userService.validateRolesPro())">{{sound.soundSocial.playedCount}}</span>
+                                        <span ng-if="userService.validateRolePro() || userService.validateRolesPro()"><a
                                                 href="sound/{{sound.alias}}?scrollTo=plays">{{sound.soundSocial.playedCount}}</a></span>
                                     </span>
                                 |
@@ -162,7 +185,7 @@
                                 |
                                 <i class="icon-comment stat_icon"></i><a
                                     href="sound/{{sound.alias}}?scrollTo=comments">{{sound.soundSocial.commentsCount}}</a>
-                                    <span ng-show="sound.owner.alias == userService.getCurUserAlias()">
+                                    <span ng-if="sound.owner.alias == userService.getCurUserAlias()">
                                         |
                                         <i class="icon-eye-open stat_icon"></i><a
                                             href="sound/{{sound.alias}}?scrollTo=visits">{{sound.soundSocial.visitsCount}}</a>
@@ -174,42 +197,47 @@
             </div>
         </div>
     </div>
+</div>
+<div style="text-align: center;border-bottom: 2px solid #E6E6E6;line-height: 30px;cursor: pointer"
+     ng-click="loadStream()" ng-if="curSoundList.getList().length > 0">
+    <span ng-if="!isloading" style="color:gray;font-size: 13px">加载更多...</span>
+</div>
 
-    <div style="text-align: center;border-bottom: 2px solid #E6E6E6;line-height: 30px;cursor: pointer" ng-click="loadStream()" ng-show="curSoundList.getList().length > 0">
-        <span ng-show="!isloading" style="color:gray;font-size: 13px">加载更多...</span>
+<div ng-if="isloading" style="text-align: center;">
+    <i class="icon-spinner icon-spin icon-large"></i> 努力加载中...
+</div>
+
+<div ng-if="!isloading && curSoundList.getList().length == 0">
+    <div ng-if="!routeParams.filter && !routeParams.value"
+         style="text-align: center;padding-top: 10%">
+        您还没有推送的声音流，发现自己的<a href="interest">乐趣</a>，将有更多声音推送。
     </div>
 
-    <div ng-show="isloading" style="text-align: center;">
-        <i class="icon-spinner icon-spin icon-large"></i> 努力加载中...
+    <div ng-if="!routeParams.filter && routeParams.value && routeParams.value == userService.getCurUserAlias()"
+         style="text-align: center;padding-top: 10%">
+        <span class="hidden-xs">您还没有自己的音乐流，<a href="upload">上传音乐</a>或<a href="interest">发现乐趣</a>， 创建属于自己的音乐流。</span>
+        <span class="visible-xs">您还没有自己的音乐流，<a href="interest">发现乐趣</a>，建立自己音乐推送。</span>
     </div>
 
-    <div ng-show="!isloading && curSoundList.getList().length == 0">
-        <div ng-show="!routeParams.filter && !routeParams.value"
-             style="text-align: center;padding-top: 10%">
-            您还没有推送的声音流，发现自己的<a href="interest">乐趣</a>，将有更多声音推送。
-        </div>
-
-        <div ng-show="!routeParams.filter && routeParams.value && routeParams.value == userService.getCurUserAlias()"
-             style="text-align: center;padding-top: 10%">
-            <span  class="hidden-xs">您还没有自己的音乐流，<a href="upload">上传音乐</a>或<a href="interest">发现乐趣</a>， 创建属于自己的音乐流。</span>
-            <span class="visible-xs">您还没有自己的音乐流，<a href="interest">发现乐趣</a>，建立自己音乐推送。</span>
-        </div>
-
-        <div ng-show="!routeParams.filter && routeParams.value && routeParams.value != userService.getCurUserAlias()"
-             style="text-align: center;padding-top: 10%;color:gray">
-            {{userCurPage}}未上传或转发声音
-        </div>
-
-        <div ng-show="routeParams.filter === 'match'" style="text-align: center;padding-top: 10%;color:gray">
-            没有找到结果，请尝试其他关键词
-        </div>
-        <div ng-show="routeParams.filter === 'tags' && !$parent.curatedTags"
-             style="text-align: center;padding-top: 10%;color:gray">
-            没有找到结果，请尝试其他标签
-        </div>
-        <div ng-show="routeParams.filter === 'tags' && $parent.curatedTags">
-            暂无声音推荐
-        </div>
+    <div ng-if="!routeParams.filter && routeParams.value && routeParams.value != userService.getCurUserAlias()"
+         style="text-align: center;padding-top: 10%;color:gray">
+        {{userCurPage}}未上传或转发声音
     </div>
+
+    <div ng-if="routeParams.filter === 'match'" style="text-align: center;padding-top: 10%;color:gray">
+        没有找到结果，请尝试其他关键词
+    </div>
+    <div ng-if="routeParams.filter === 'tags' && !$parent.curatedTags"
+         style="text-align: center;padding-top: 10%;color:gray">
+        没有找到结果，请尝试其他标签
+    </div>
+    <div ng-if="routeParams.filter === 'playlist' && !$parent.curatedTags"
+         style="text-align: center;padding-top: 10%;color:gray">
+        您的播放列表中暂无音乐
+    </div>
+    <div ng-if="routeParams.filter === 'tags' && $parent.curatedTags">
+        暂无声音推荐
+    </div>
+</div>
 
 </div>

@@ -9,7 +9,7 @@
 
         var defaultUpperColor = '#4f4f4f';
         var defaultLowerColor = '#9E9E9E';
-        var loadedUpperColor = '#2f2f2f';
+        var loadedUpperColor = '#3c3c3c';
         var loadedUpperDeeperColor = '#1f1f1f';
         var loadedLowerColor = '#9E9E9E';
         var playedUpperColor = '#00B2EE';
@@ -42,13 +42,8 @@
             delete waveData;
         }
 
-        this.recoverWaveData = function(storage) {
-            var storedSound = storage.get(soundId + "_wave");
-            var canvas = document.getElementById("sound_wave_canvas_" + soundId);
-            canvas.width = $('#sound_wave_' + soundId).width();
-            canvas.height = $('#sound_wave_' + soundId).height();
-           this.updateCanvas(canvas, storedSound.waveData);
-           delete storedSound;
+        this.releaseCanvas = function() {
+            context.clearRect(0,0, canvas.width, canvas.height);
         }
 
         this.redraw = function () {
@@ -154,7 +149,6 @@
         }
 
         function redrawWave() {
-            context.fillStyle = "transparent";
             var widthPerLine = waveWidth / waveData.length;
 
             $.each(waveData, function (index, data) {
@@ -209,7 +203,7 @@
         function getStatusColor(index, x){
             if (x < soundPosition / soundDuration)
             {
-                return 'white';
+                return '#F4F4F4';
             }
             else
             {

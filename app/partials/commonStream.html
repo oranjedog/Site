@@ -1,6 +1,6 @@
 <ng-include src="'partials/header.html'"></ng-include>
 
-<div role="main">
+<div role="main"  ng-controller="recommandUserCtrl">
 
     <div class="row">
         <div class="col-md-2 hidden-xs">
@@ -8,12 +8,16 @@
 
         <div class="col-md-6 col-xs-12">
             <div class="title_div">
-                <h2 class="title_h2">您关注的声音流</h2>
+                <h2 class="title_h2">
+                    <span ng-if="!routeParams.filter && !routeParams.value">您关注的声音流</span>
+                    <span ng-if="routeParams.filter === 'match'">关键字{{routeParams.value}}的声音流</span>
+                    <span ng-if="routeParams.filter === 'playlist'">播放列表中的声音流</span>
+                </h2>
             </div>
             <ng-include src="'partials/stream.html'"></ng-include>
         </div>
 
-        <div class="col-md-2 hidden-xs" ng-controller="recommandUserCtrl">
+        <div class="col-md-2 hidden-xs">
             <div class="affix" style="width: 16%;padding-left: 20px">
                 <div style="padding-top: 15px;height:150px">
                     <div class="title_div" style="font-size: 13px">
@@ -30,12 +34,12 @@
                     <div class="{{msgClass}}" style="padding-bottom: 10px;font-size: 10px">
                         {{msg}}
                     </div>
-                    <div ng-if="recommendUsers.length > 0" class="row">
+                    <div ng-if="recommendUsers.length > 0" class="row" style="padding-top: 15px">
                         <div ng-repeat="recommendUser in recommendUsers" class="col-xs-3" ng-click="toogleFollow()"  style="padding-left: 8px;padding-right: 8px">
                             <div ng-show="$index < 4">
-                                <div class="user {{recommendUser.class}}">
+                                <div>
                                     <a href="#" onclick="return false;">
-                                        <img ng-src="{{recommendUser.profile.avatorUrl}}" class="user_avatar_oval" style="width: 37px;height: 37px">
+                                        <img ng-src="{{recommendUser.profile.avatorUrl}}" class="user_avatar_oval user {{recommendUser.class}}" style="width: 37px;height: 37px">
                                     </a>
                                 </div>
                                 <div class="user_alias">
@@ -59,7 +63,7 @@
                         </h2>
                     </div>
 
-                    <div ng-if="recommendSounds.length > 0"  class="row">
+                    <div ng-if="recommendSounds.length > 0"  class="row" style="padding-top: 15px">
                         <div ng-repeat="recommendSound in recommendSounds"  class="col-xs-3" style="padding-left: 8px;padding-right: 8px">
                             <div ng-show="$index < 4">
                                 <div>

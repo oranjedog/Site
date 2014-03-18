@@ -55,7 +55,7 @@
         <div class="controls">
             <div style="color: gray; font-size: 12px">
                 <span><input type="checkbox" ng-model="rememberUser">  保持登录状态</span>
-                <a href="guest/forgetPass" class="pull-right">忘记密码</a>
+                <a  href="#" onclick="return false;" ng-click="toForgetPass()" class="pull-right">忘记密码</a>
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
     <div class="form-group">
         <div class="controls">
             <div style="color: gray; font-size: 12px">
-                还没有注册WOWOICE?<a href="guest/register">立即注册！</a>
+                还没有注册WOWOICE?<a href="#" onclick="return false;" ng-click="toRegiste()">立即注册！</a>
             </div>
         </div>
         <div class="hidden-xs" style="padding-top: 10px"></div>
@@ -119,8 +119,8 @@
                 </div>
 
                 <div class="modal-body row">
-                    <div class="col-md-2"></div>
-                    <div class="col-xs-12 col-md-10">
+                    <div class="col-sm-2"></div>
+                    <div class="col-xs-12 col-sm-10">
                         <label><i class="icon-envelope"></i>
                                 <span style="padding-left: 15px"><a
                                         href="mailto:communications@wowoice.com">communications@wowoice.com</a></span></label>

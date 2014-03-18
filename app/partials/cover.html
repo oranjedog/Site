@@ -1,21 +1,22 @@
-<header class="cover_header" style="margin-top: -90px">
+<header class="cover_header" style="margin-top: -90px;" ng-style="getWindowHeightCss()">
     <table class="featuredText">
         <tbody><tr>
             <td class="strapline" style="vertical-align: middle; text-align: center; margin-top: 0px; opacity: 1;">
                 <div class="title-container" id="hero">
-                    <h2 style="font-size: 30px">发现 & 分享</h2>
+                    <h2 style="font-size: 30px">发现  分享</h2>
                     <div class="dash"></div>
                 </div>
                 <h1 class="intro-text">记录您的声音 &amp; 更有趣的互动 &amp; 分享到更多地方 </h1>
-                <a class="intro-btn" href="#mission" style="outline: 0;text-decoration: none;-webkit-transition: all .2s ease;transition: all .2s ease;
+                <a class="intro-btn" href="#" onclick="return false" ng-click="scrollTo('missionId')" style="outline: 0;text-decoration: none;-webkit-transition: all .2s ease;transition: all .2s ease;
                 -webkit-transition: all .2s ease;-webkit-transition: all .2s ease;-ms-transition: all .2s ease;-o-transition: all .2s ease;">
                     了解更多</a>
+                <a class="intro-btn" href="/interest" style="text-decoration: none;outline: 0;">开始体验</a>
             </td>
         </tr>
         </tbody></table>
 </header>
 
-<section class="mission" id="mission">
+<section class="mission" id="missionId" ng-style="getWindowHeightCss()">
     <div class="mission-inner">
         <div class="title-container">
             <h3 class="titles">WOWOICE的理念</h3>
@@ -32,18 +33,18 @@
     </div>
     <div class="cover_container" id="services">
         <div class="cover_row grid services">
-            <div class="service-box one_three" style="width: 370px;margin-bottom: 10px;float: left;height: auto;overflow: auto;">
+            <div class="service-box one_three" style="width: 30%;margin-bottom: 10px;margin-left: 3%;float: left;height: auto;overflow: auto;">
                 <img style="vertical-align: middle;" src="http://www.mynameischris.co.uk/wp-content/themes/mynameischris/common/images/web-design.svg" alt="" title="">
                 <h1>记录</h1>
                 <p>不论本地或是云端，都能轻松上传您的声音。  </p>
             </div>
-            <div class="service-box two_three" style="width: 370px;margin-bottom: 10px;margin-left: 30px;float: left;height: auto;overflow: auto;">
+            <div class="service-box two_three" style="width: 30%;margin-bottom: 10px;margin-left: 3%;float: left;height: auto;overflow: auto;">
 
                 <img style="vertical-align: middle;"  src="http://www.mynameischris.co.uk/wp-content/themes/mynameischris/common/images/web-development.svg" alt="" title="">
                 <h2>互动</h2>
                 <p>喜欢那一刻，就赞美那一刻。 </p>
             </div>
-            <div class="service-box three_three" style="width: 370px;margin-bottom: 10px;margin-left: 30px;float: left;height: auto;overflow: auto;">
+            <div class="service-box three_three" style="width: 30%;margin-bottom: 10px;margin-left: 3%;float: left;height: auto;overflow: auto;">
                 <img style="vertical-align: middle;"  src="http://www.mynameischris.co.uk/wp-content/themes/mynameischris/common/images/app-design.svg" alt="" title="">
                 <h3>分享</h3>
                 <p>会有更多人听到你的声音。</p>

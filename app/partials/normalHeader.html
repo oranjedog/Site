@@ -1,0 +1,148 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" style="padding: 0px;" href="#" title="Wooice" ng-click="goto('/interest')">
+            <img class="img-responsive" ng-src="img/logo.jpg" style="width: 50px;height: 50px"/>
+        </a>
+    </div>
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="dropdown" style="margin-right: -10px"  ng-if="!userService.validateRoleGuest()">
+                <a href="#" onclick="return false;" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/stream/playlist/default">播放列表</a></li>
+                </ul>
+            </li>
+            <li ng-if="!userService.validateRoleGuest()">
+                <a href="#" onclick="return false;" title="你关注的声音推送" ng-click="goto('/stream')">关注</a>
+            </li>
+            <li>
+                <a href="#" onclick="return false;" ng-click="goto('/interest')" title="发现你感兴趣的声音">发现</a>
+            </li>
+        </ul>
+
+        <form class="navbar-form navbar-left" role="search" style="width:20%;padding-left: 2%">
+            <div class="form-group">
+                <input type="text" id="search_box" class="form-control" ng-model="q" placeholder="寻找一段声音...">
+            </div>
+        </form>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" onclick="return false;" title="上一首"><i
+                    style="cursor:pointer;"
+                    class='icon-step-backward' ng-click="playPre()"></i></a>
+            </li>
+            <li><a href="#" onclick="return false;">
+                <i style="cursor:pointer;"
+                   class='sound_player_button'
+                   ng-class="wooicePlayer.getCurSound().isPlaying? 'icon-pause': 'icon-play'"
+                   ng-click="togglePause()"></i></a></li>
+            <li ng-if="wooicePlayer.getCurSound().id" style="max-width:100px;overflow: hidden">
+                <a href="{{wooicePlayer.getCurSound().title.route}}" style="padding-left: 0px;padding-right: 0px">
+                    <div style="color: white;height: 20px;overflow: hidden">{{wooicePlayer.getCurSound().title.alias}}
+                    </div>
+                </a>
+            </li>
+            <li ng-if="wooicePlayer.getCurSound().id">
+                <a style="color: #999;font-size: 12px" onclick="return false;">
+                    <span ng-if="wooicePlayer.getCurSound().curPostion>0">{{formatTime(wooicePlayer.getCurSound().curPostion/1000)}}</span>
+                    <span ng-if="wooicePlayer.getCurSound().curPostion>0 && wooicePlayer.getCurSound().duration>0">/</span>
+                    <span ng-if="wooicePlayer.getCurSound().duration>0">{{formatTime(wooicePlayer.getCurSound().duration)}}</span>
+                </a>
+            </li>
+            <li><a href="#" onclick="return false;" title="下一首"><i
+                    style="cursor:pointer;"
+                    class='icon-step-forward' ng-click="playNext()"></i></a>
+            </li>
+            <li><a href="#" onclick="return false;" title="{{playModes[playMode]}}"
+                   ng-click="changePlayStyle()">
+                <i style="cursor:pointer;" class='icon-list-ol' ng-show="playMode == 0"></i>
+                <i style="cursor:pointer;" class='icon-exchange' ng-show="playMode == 1"></i>
+                <i style="cursor:pointer;" class='icon-random' ng-show="playMode == 2"></i>
+                <i style="cursor:pointer;" class='icon-minus-sign-alt' ng-show="playMode == 3"></i>
+            </a>
+            </li>
+            <li>
+                <a id="playlist_button" style="cursor: pointer;" ng-click="togglePlaylist()">
+                    <i class="icon-th-list" title="播放列表"></i>
+                    <i class="badge" style="background-color: #7d98b8">{{playList.list().length}}</i>
+                </a>
+                <span id="playlist_content" class="display_panel" style="display: none">
+                        <span class="display_header">
+                            <a href="/stream/playlist/default" ng-if="!userService.validateRoleGuest()">播放列表</a>
+                            <span ng-if="userService.validateRoleGuest()">播放列表</span>
+                            <span style="font-size: 12px;font-weight: normal"> ({{playList.list().length}})</span>
+                            <span class="pull-right" style="cursor: pointer;color: #ffffff;font-size: 12px"
+                                  ng-click="clearPlaylist()">清空列表</span>
+                        </span>
+
+                    <span class="display_content_div">
+                        <div class="display_content"><span style="color: white">{{showPlaylist}}</span>
+                            <div ng-repeat="sound in playList.list()" class="display_song"
+                                 style="width: 100%;background: {{sound.isPlaying?'#39c':'white'}};">
+                                <span style="padding-left: 10px;padding-right: 10px" class="pull-left">
+                                    <i style="cursor:pointer;color: {{sound.isPlaying?'white':'#666'}}"
+                                       class="sound_player_button {{sound.isPlaying?'icon-pause': 'icon-play-circle'}}"
+                                       ng-click="togglePauseList(sound.id)"></i>
+                                </span>
+                                <span style="width: 135px;white-space: nowrap;overflow: hidden;display: inline-block;font-size: 12px;font-weight: normal">
+                                       <a href="{{sound.title.route}}"
+                                          style="width: 100%;color: {{sound.isPlaying?'white':'#666'}}">{{sound.title.alias}}
+                                           -
+                                           {{sound.owner.alias}}</a>
+                                </span>
+                                 <span class="pull-right" style="padding-right: 10px;padding-left: 5px">
+                                       <a onclick="return false;" ng-click="removeSoundFromPlaylist(sound)"><i
+                                               class="icon-remove"
+                                               style="color: {{sound.isPlaying?'white':'#666'}}"></i></a>
+                                 </span>
+                            </div>
+                            <div ng-show="playList.list().length==0" style="padding-left: 20%;padding-top: 30%">
+                                <span style="color: gray;">您还没有添加任何歌曲</span>
+                            </div>
+                        </div>
+                    </span>
+                </span>
+            </li>
+            <li style="padding-right: 40px">
+                <a ng-click="showVolumePanel=!showVolumePanel" title="音量调节">
+                    <i style="cursor:pointer;"
+                       class='icon-volume-up'></i>
+                </a>
+
+                <div ng-show="showVolumePanel" style="position : absolute;left: 15px;">
+                    <div ui-slider="{orientation: 'vertical', range: 'max'}" min="0" max="100" step="1"
+                         ng-model="volume"></div>
+                </div>
+            </li>
+            <li ng-if="!userService.validateRoleGuest()"
+                style="border-left-width: 1px;border-left-style: solid;border-left-color: rgba(0, 0, 0, 0.498039);">
+                <a href="#" onclick="return false;" ng-click="goto('/stream/{{userAlias}}')" title="您的主页"
+                   style="padding: 10px;">
+                    <img ng-src="{{userAvatar}}" class="user_avatar_oval" style="width: 30px;height: 30px"/>
+                </a>
+            </li>
+            <li ng-if="!userService.validateRoleGuest()">
+                <a title="邮件箱"
+                   href="#" onclick="return false;" ng-click="goto('/messages')"><i class="icon-envelope"></i>
+                    <span class="badge" ng-if="unreadMsgs>0" style="background-color: #39b3d7">{{unreadMsgs}}</span>
+                </a>
+            </li>
+            <li ng-if="!userService.validateRoleGuest()">
+                <a title="个人配置"
+                   href="#" onclick="return false;" ng-click="goto('/profile')"><i class="icon-cog"></i></a>
+            </li>
+            <li style="padding-right: 50px" ng-if="!userService.validateRoleGuest()">
+                <a href="#" onclick="return false;" ng-click="goto('/upload')" title="声音上传">分享</a>
+            </li>
+            <li><a href="#feedback" onclick="return false;" data-toggle="modal" title="意见反馈"><i
+                    class="icon-edit"></i></a></li>
+            <li style="padding-right: 10px" ng-if="userService.validateRoleGuest()"><a href="#" onclick="return false;"
+                                                                                       ng-click="showLoginForm()"><i
+                    class="icon-signin" title="注册登录"></i></a></li>
+            <li style="padding-right: 10px" ng-if="!userService.validateRoleGuest()"><a href="#" onclick="return false;"
+                                                                                        ng-click="logout()"><i
+                    class="icon-signout" title="退出登录"></i></a></li>
+        </ul>
+    </div>
+</nav>

@@ -12,8 +12,8 @@ angular.module('sound.pro.services', ['ngResource'])
     ])
     .factory('SoundSocialProSocial', ['$resource', 'config', function ($resource, config) {
         return $resource(config.service.url + '/soundActivityPro/:soundId/:action', {}, {
-            plays: {method: 'GET', params: {action: 'plays', pageNum: 0, perPage: config.repostsPerPage}, isArray: true},
-            visits: {method: 'GET', params: {action: 'visits', pageNum: 0, perPage: config.repostsPerPage}, isArray: true}
+            plays: {method: 'GET', cache : true, params: {action: 'plays', pageNum: 0, perPage: config.repostsPerPage}, isArray: true},
+            visits: {method: 'GET', cache : true, params: {action: 'visits', pageNum: 0, perPage: config.repostsPerPage}, isArray: true}
         });
     }
     ]);

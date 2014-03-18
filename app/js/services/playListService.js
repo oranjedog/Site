@@ -7,8 +7,8 @@ angular.module('playlist.services', ['ngResource'])
         });
     }
     ])
-    .factory('PlayList', ['User', 'UserService', 'PlayListService', 'SoundUtilService', 'CurSoundList', 'config', 'storage',
-        function (User, UserService, PlayListService, SoundUtilService, CurSoundList, config, storage) {
+    .factory('PlayList', ['$q', 'User', 'UserService', 'PlayListService', 'SoundUtilService', 'CurSoundList', 'config', 'storage',
+        function ($q, User, UserService, PlayListService, SoundUtilService, CurSoundList, config, storage) {
             var sounds = [];
 
             if (!UserService.validateRoleGuest()) {
@@ -24,11 +24,17 @@ angular.module('playlist.services', ['ngResource'])
                 if (storage.get('guest_list') && $.isArray(storage.get('guest_list')))
                 {
                     sounds = storage.get('guest_list');
+
+                    $.each(sounds, function (index, oneSound) {
+                        oneSound.isPlaying = false;
+                    });
                 }
             }
 
             return {
                 setup: function () {
+                    sounds = [];
+
                     if (!UserService.validateRoleGuest()) {
                         var playlist = PlayListService.get({}, function () {
                             $.each(playlist, function (index, oneSound) {
@@ -39,7 +45,29 @@ angular.module('playlist.services', ['ngResource'])
                     }
                 },
                 clearAll: function() {
-                    sounds = [];
+                        if (!UserService.validateRoleGuest())
+                        {
+                            var calls = [];
+
+                            for (var i = 0; i < sounds.length; i++) {
+                                var callDefer = $q.defer();
+                                PlayListService.remove({soundId: sounds[i].id}, function () {
+                                    callDefer.resolve();
+                                });
+                                calls.push(callDefer.promise);
+                            }
+
+                            $q.all(calls).then(
+                                function(){
+                                    sounds = [];
+                                }
+                            );
+                        }
+                        else
+                        {
+                            sounds = [];
+                            storage.set('guest_list', sounds);
+                        }
                 },
                 list: function () {
                     return sounds;
@@ -54,7 +82,11 @@ angular.module('playlist.services', ['ngResource'])
                         }
                     }
                     sounds.push(sound);
-                    storage.set('guest_list', sounds);
+
+                    if (UserService.validateRoleGuest())
+                    {
+                        storage.set('guest_list', sounds);
+                    }
                 },
                 removeSound: function (sound) {
                     for (var i = 0; i < sounds.length; i++) {
@@ -71,7 +103,10 @@ angular.module('playlist.services', ['ngResource'])
                         }
                     }
 
-                    storage.set('guest_list', sounds);
+                    if (UserService.validateRoleGuest())
+                    {
+                        storage.set('guest_list', sounds);
+                    }
                 },
                 getSound: function (id) {
                     for (var i = 0; i < sounds.length; i++) {

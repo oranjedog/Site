@@ -17,8 +17,8 @@ angular.module('user.services', ['ngCookies']).
         return $resource(config.service.url + '/userActivity/:userAlias/:action/:toUserAlias', {}, {
             follow: {method: 'PUT', params: {action: 'follow', toUserAlias: 'current'}, isArray: false},
             unfollow: {method: 'DELETE', params: { action: 'follow', toUserAlias: 'current'}, isArray: false},
-            getRecommandByTags: {method: "POST", params:{action: 'recommand', toUserAlias: 'users'}, isArray: true },
-            getRecommand: {method: "POST", params:{action: 'recommand', toUserAlias: 'user'}, isArray: true },
+            getRecommandByTags: {method: "POST", cache : true, params:{action: 'recommand', toUserAlias: 'users'}, isArray: true },
+            getRecommand: {method: "POST", cache : true, params:{action: 'recommand', toUserAlias: 'user'}, isArray: true },
             getFollowed: {method: "GET", params:{action: 'followed', pageSize: 3}, isArray: true },
             getFollowing: {method: "GET", params:{action: 'following', pageSize: 3}, isArray: true }
         });

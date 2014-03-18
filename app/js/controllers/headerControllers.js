@@ -70,7 +70,9 @@ angular.module('header.controllers', [])
         };
 
         $scope.showLoginForm = function() {
-            $('#login_modal').modal();
+            $('#login_modal').modal({
+                backdrop: false
+            });
         }
 
         $scope.feedback = {};
@@ -97,12 +99,7 @@ angular.module('header.controllers', [])
         };
 
         $scope.togglePauseList = function (id) {
-            var soundDisplayed = CurSoundList.getSound(id);
-            if (soundDisplayed)
-            {
-                PlayList.addSound(soundDisplayed);
-            }
-            WooicePlayer.toggle(PlayList.getSound(id));
+            WooicePlayer.toggleInPlaylist(id);
         };
 
         $scope.playPre = function () {
@@ -119,11 +116,11 @@ angular.module('header.controllers', [])
         }
 
         $scope.removeSoundFromPlaylist = function(sound) {
-             PlayList.removeSound(sound);
+             WooicePlayer.destroy(sound);
         }
 
         $scope.clearPlaylist = function(sound) {
-            PlayList.clearAll();
+            WooicePlayer.clearCurPlayList();
         }
 
         $('#search_box').bind('keyup', function (event) {
@@ -134,14 +131,13 @@ angular.module('header.controllers', [])
             }
         });
 
-        $('#playlist_content').hide();
-
         $scope.togglePlaylist = function(){
             $('#playlist_content').slideToggle();
         }
 
         $('body').click(function(evt) {
             if(evt.target.id!='playlist_content' && $(evt.target).parents('#playlist_content').length==0
+                && evt.target.id!='playlist_content' && $(evt.target).parents('.display_song').length==0
                 && evt.target.id!='playlist_button' && $(evt.target).parents('#playlist_button').length==0) {
                 $('#playlist_content').slideUp();
             }
